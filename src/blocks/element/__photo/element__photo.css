@@ -1,0 +1,12 @@
+.element__photo {
+    width: 282px;
+    height: 282px;
+    grid-area: photo;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px 10px 0 0;
+}
+
+.element__photo:hover {
+    cursor: pointer;
+}

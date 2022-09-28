@@ -1,0 +1,12 @@
+.info__title {
+    margin-top: 32px;
+    margin-bottom: 60px;
+    width: calc(100% - 2*36px);
+    font-family: 'Inter',Arial,sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    color: #000000;
+}

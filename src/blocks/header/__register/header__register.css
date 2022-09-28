@@ -1,0 +1,5 @@
+.header__register {
+    display: flex;
+    width: fit-content;
+    justify-content: right;
+}
