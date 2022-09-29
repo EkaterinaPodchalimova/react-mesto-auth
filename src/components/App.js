@@ -94,6 +94,7 @@ function App() {
             auth.checkToken(jwt)
                 .then((res) => {
                     if (res) {
+                        editEmail(res.data.email);
                         handleLoginTrue();
                     }
                 })

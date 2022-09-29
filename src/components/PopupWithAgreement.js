@@ -10,7 +10,7 @@ function PopupWithAgreement(props) {
 
     return (
         <PopupWithForm isOpen={props.isOpen} onSubmit={handleSubmit} name='delete-card' title='Вы уверены?'
-                       button='Да' onClick={props.onClose}/>
+                       button='Да' onClick={props.onClose} isValid={true}/>
     )
 }
 
