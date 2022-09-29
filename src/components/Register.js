@@ -39,10 +39,10 @@ class Register extends React.Component {
                     <form onSubmit={this.handleSubmit} className="register__form">
                         <input type="email" placeholder="Email" name="email" id="email" className="register__input"
                                required
-                               pattern="^[^\s]+(\s.*)?$" value={this.state.email} onChange={this.handleChange}/>
+                               pattern="^[^\s]+(\s.*)?$" value={this.state.email  || ''} onChange={this.handleChange}/>
                         <input type="password" placeholder="Пароль" name="password" className="register__input"
                                id="password" required
-                               pattern="^[^\s]+(\s.*)?$" value={this.state.password}
+                               pattern="^[^\s]+(\s.*)?$" value={this.state.password  || ''}
                                onChange={this.handleChange}/>
                         <button type="submit" onSubmit={this.handleSubmit} className="register__link">Зарегистрироваться
                         </button>

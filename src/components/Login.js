@@ -39,9 +39,9 @@ class Login extends React.Component {
                 <p className="login__welcome">Вход</p>
                 <form onSubmit={this.handleSubmit} className="login__form">
                     <input type="email" placeholder="Email" name="email" id="email" className="login__input" required
-                           pattern="^[^\s]+(\s.*)?$" value={this.state.email} onChange={this.handleChange}/>
+                           pattern="^[^\s]+(\s.*)?$" value={this.state.email  || ''} onChange={this.handleChange}/>
                     <input type="password" placeholder="Пароль" name="password" className="login__input" id="password" required
-                           pattern="^[^\s]+(\s.*)?$" value={this.state.password}
+                           pattern="^[^\s]+(\s.*)?$" value={this.state.password  || ''}
                            onChange={this.handleChange}/>
                     <button type="submit" className="login__link">Войти</button>
                 </form>
