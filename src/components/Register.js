@@ -1,16 +1,13 @@
 import React from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import * as auth from './auth';
 import Header from "./Header";
-import InfoTooltip from "./InfoTooltip";
 
 class Register extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             email: '',
-            password: '',
-            res: false
+            password: ''
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,33 +20,17 @@ class Register extends React.Component {
         });
     }
 
-    handleButtonClick = (res) => {
-        this.props.onClick();
-        if (res) {
-            this.props.history.push('sign-in')
-        }
-        this.setState({
-            email: '',
-            password: '',
-            res: false
-        })
-    }
-
     handleSubmit = (e) => {
         e.preventDefault();
-        auth.register({password: this.state.password, email: this.state.email})
-            .then((res) => {
-                if (res.data) {
-                    this.props.editEmail(this.state.email);
-                    this.setState({res: true})
-                }
-                this.props.isOpen(true);
-            })
+        this.props.handleApiRegister({password: this.state.password, email: this.state.email});
+        this.setState({
+            email: '',
+            password: ''
+        })
     }
 
     render() {
         return (
-            <>
                 <div className="register">
                     <Header>
                         <Link to="/sign-in" className="sign__link">Войти</Link>
@@ -71,10 +52,6 @@ class Register extends React.Component {
                         <Link to="/sign-in" className="register__login-link">&nbsp;Войти</Link>
                     </div>
                 </div>
-                <InfoTooltip isOpen={this.props.isInfoTooltip} onClick={() => {
-                    this.handleButtonClick(this.state.res)
-                }} res={this.state.res}/>
-            </>
         );
     }
 }

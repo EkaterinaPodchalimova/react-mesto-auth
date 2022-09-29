@@ -10,7 +10,7 @@ class PopupWithImage extends React.Component {
                 return (
                     <div className={classList}>
                         <div className="popup__card-container">
-                            <img src={this.props.card.link} className="popup__card-photo" alt=""/>
+                            <img src={this.props.card.link} className="popup__card-photo" alt={this.props.card.name}/>
                             <button className="popup__close popup__close_type_card" type="button"
                                     aria-label="Закрыть" onClick={this.props.onClose}></button>
                             <h2 className="popup__card-place">{this.props.card.name}</h2>

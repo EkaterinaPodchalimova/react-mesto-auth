@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import * as auth from './auth';
 import Header from './Header';
 
 class Login extends React.Component {
@@ -24,15 +23,7 @@ class Login extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.editEmail(this.state.email);
-        auth.authorize({password: this.state.password, email: this.state.email})
-            .then((data) => {
-                if (data.token) {
-                    this.props.editEmail(this.state.email);
-                    this.props.handleLogin();
-                }
-            })
-            .catch(err => console.log(err));
+        this.props.handleAuthorize({password: this.state.password, email: this.state.email})
         this.setState({
             email: '',
             password: ''

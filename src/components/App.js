@@ -11,23 +11,25 @@ import EditAvatarPopup from './EditAvatarPopup';
 import PopupWithImage from "./PopupWithImage";
 import PopupWithAgreement from "./PopupWithAgreement";
 import AddPlacePopup from "./AddPlacePopup";
+import InfoTooltip from "./InfoTooltip";
 import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
-import * as auth from './auth.js';
+import * as auth from '../utils/auth.js';
 
 function App() {
     const [isEditAvatarPopupOpen, handleEditAvatarClick] = React.useState(false);
     const [isAddPlacePopupOpen, handleAddCardClick] = React.useState(false);
     const [isEditProfilePopupOpen, handleEditProfileClick] = React.useState(false);
     const [isAgreementPopupOpen, handleDeleteCardClick] = React.useState(false);
-    const [isInfoTooltip, handleRegister] = React.useState(false);
+    const [isInfoTooltip, handleRegisterClick] = React.useState(false);
     const [selectedDeleteCard, handleDeleteClick] = React.useState({});
     const [selectedCard, handleCardClick] = React.useState({});
     const [currentUser, editUserInformation] = React.useState({});
     const [cards, createCards] = React.useState([]);
     const [loggedIn, handleLogin] = React.useState(false);
     const [isEmail, editEmail] = React.useState('');
+    const [response, editRes] = React.useState(false);
     const {push} = useHistory();
 
     React.useEffect(() => {
@@ -83,7 +85,7 @@ function App() {
         handleAddCardClick(false);
         handleEditProfileClick(false);
         handleDeleteCardClick(false);
-        handleRegister(false)
+        handleRegisterClick(false)
     }
 
     function handleTokenCheck() {
@@ -95,14 +97,38 @@ function App() {
                         handleLoginTrue();
                     }
                 })
+                .catch((err) => console.log(err));
         }
     }
 
-    const handleLogOut = () => {
-        handleLogin(false);
-        editEmail('');
-        localStorage.removeItem('jwt');
-        push('/sign-in');
+    function handleAuthorize({password, email}) {
+        auth.authorize({password, email})
+            .then((data) => {
+                if (data.token) {
+                    editEmail(email);
+                    handleLoginTrue();
+                }
+            })
+            .catch(err => console.log(err));
+    }
+
+    async function handleApiRegister({password, email}) {
+        editRes(false);
+        auth.register({password, email})
+            .then((res) => {
+                if (res.data) {
+                    editRes(true)
+                }
+                handleRegisterClick(true);
+            })
+            .catch((err) => console.log(err));
+    }
+
+    function handleCloseInfoTool(res) {
+        closeAllPopups();
+        if (res) {
+            push('sign-in')
+        }
     }
 
     const handleLoginTrue = () => {
@@ -119,16 +145,21 @@ function App() {
             .catch((err) => console.log(err));
     }
 
+    const handleLogOut = () => {
+        handleLogin(false);
+        editEmail('');
+        localStorage.removeItem('jwt');
+        push('/sign-in');
+    }
+
     return (
         <Switch>
             <Route path="/sign-up">
-                <Register editEmail={editEmail}
-                          isOpen={handleRegister}
-                          isInfoTooltip={isInfoTooltip}
-                          onClick={closeAllPopups}/>
+                <Register handleApiRegister={handleApiRegister}/>
+                <InfoTooltip isOpen={isInfoTooltip} onClick={handleCloseInfoTool} res={response}/>
             </Route>
             <Route path="/sign-in">
-                <Login editEmail={editEmail} handleLogin={handleLoginTrue}/>
+                <Login handleAuthorize={handleAuthorize}/>
             </Route>
             <ProtectedRoute path='/' loggedIn={loggedIn}>
                 <CurrentUserContext.Provider value={currentUser}>
@@ -156,11 +187,14 @@ function App() {
                                          onUpdateAvatar={handleUpdateAvatar}/>
                         <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups}
                                        onAddPlace={handleAddPlaceSubmit}/>
-                        <PopupWithAgreement onClose={() => {
-                            closeAllPopups();
-                            handleDeleteClick({})
-                        }} onDeleteCard={handleCardDelete} card={selectedDeleteCard}
-                                            isOpen={isAgreementPopupOpen}/>
+                        <PopupWithAgreement
+                            onClose={() => {
+                                closeAllPopups();
+                                handleDeleteClick({})
+                            }}
+                            onDeleteCard={handleCardDelete}
+                            card={selectedDeleteCard}
+                            isOpen={isAgreementPopupOpen}/>
                         <PopupWithImage card={selectedCard} onClose={() => {
                             handleCardClick({})
                         }}/>

@@ -4,20 +4,23 @@ import PopupWithForm from "./PopupWithForm";
 function AddPlacePopup(props) {
     const [formValues, setFormValues] = React.useState({name: "", link: ""});
 
+    React.useEffect(() => {
+        setFormValues({name: "", link: ""})
+    }, [props.isOpen]);
+
+
     const handleChange = (evt) => {
         const {name, value} = evt.target;
         setFormValues(formValues => ({...formValues, [name]: value}));
     }
 
-    function handleClear(e) {
+    function handleClear() {
         props.onClose();
-        setFormValues({name: "", link: ""})
     }
 
     function handleSubmit(e) {
         e.preventDefault();
         props.onAddPlace(formValues);
-        setFormValues({name: "", link: ""})
     }
 
     return (
